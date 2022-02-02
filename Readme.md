@@ -1,4 +1,5 @@
-List of all the dependencies we have used in this project
+# This is a web project in golang, where we will try to use multiple concepts
+##List of all the dependencies we have used in this project
 
 | Name | GoCommand|
 | -----|----------|
