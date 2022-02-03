@@ -27,6 +27,15 @@ func GetFromRedis(key string) (string, error) {
 	return val, nil
 }
 
+func LPushToRedis(key string, value string) {
+	client := GetRedisClientFactory()
+	_, err := client.LPush(ctx, key, value).Result()
+	if err != nil {
+		log.Printf("Error pushing range to Redis for [%s: %s]. Error is %s", key, value, err)
+		panic(err)
+	}
+}
+
 func GetRangeFromRedis(key string, start int64, end int64) ([]string, error) {
 	client := GetRedisClientFactory()
 	result, err := client.LRange(ctx, key,  start, end).Result()

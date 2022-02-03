@@ -15,7 +15,8 @@ type RandomRouter struct {
 }
 
 func (rR RandomRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/hello", services.IndexHandler).Methods(http.MethodGet)
+	router.HandleFunc("/", services.IndexGetHandler).Methods(http.MethodGet)
+	router.HandleFunc("/", services.IndexPostHandler).Methods(http.MethodPost)
 }
 
 
