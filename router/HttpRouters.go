@@ -21,4 +21,13 @@ func (rR RandomRouter) RegisterRoute(router *mux.Router) {
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 }
 
+type LoginRouter struct {
+}
+
+func (lR LoginRouter) RegisterRoute(router *mux.Router) {
+	router.HandleFunc("/login", services.LoginGetHandler).Methods(http.MethodGet)
+	router.HandleFunc("/login", services.LoginPostHandler).Methods(http.MethodPost)
+	router.HandleFunc("/test", services.LoginTestHandler).Methods(http.MethodGet)
+}
+
 

@@ -20,4 +20,9 @@ func registerHttpRouters(r *mux.Router) {
 	log.Println("Registering Random Router......")
 	var randomRouter router.HttpRouter = &router.RandomRouter{}
 	randomRouter.RegisterRoute(r)
+
+	//registering Login Router
+	log.Println("Registering Login Router......")
+	var loginRouter router.HttpRouter = &router.LoginRouter{}
+	loginRouter.RegisterRoute(r)
 }

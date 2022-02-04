@@ -2,14 +2,12 @@ package services
 
 import (
 	"arpit006/web_app_with_go/datastore"
-	"html/template"
+	"arpit006/web_app_with_go/templ"
 	"net/http"
 )
 
-var templates *template.Template
-
 func IndexGetHandler(w http.ResponseWriter, r *http.Request) {
-	templates = template.Must(template.ParseGlob("templates/*.html"))
+	templates := templ.GetTemplateFactory()
 	comments, err := datastore.GetRangeFromRedis("comments", 0, 10)
 	if err != nil {
 		panic(err)
