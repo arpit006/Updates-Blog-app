@@ -45,3 +45,22 @@ func GetRangeFromRedis(key string, start int64, end int64) ([]string, error) {
 	}
 	return result, nil
 }
+
+func SaveBytesToRedis(key string, value []byte) {
+	client := GetRedisClientFactory()
+	err := client.Set(ctx, key, value, 0).Err()
+	if err != nil {
+		log.Printf("Error Saving bytes to Redis for [%s:%s]. Error is %s", key, string(value), err)
+		panic(err)
+	}
+}
+
+func GetBytesFromRedis(key string) ([]byte, error) {
+	client := GetRedisClientFactory()
+	bytes, err := client.Get(ctx, key).Bytes()
+	if err != nil {
+		log.Printf("Error Getting bytes to Redis for Key : [%s]. Error is %s", key, err)
+		return nil, err
+	}
+	return bytes, nil
+}

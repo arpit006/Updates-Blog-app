@@ -1,13 +1,14 @@
 package services
 
 import (
+	"arpit006/web_app_with_go/datastore"
+	sessions2 "arpit006/web_app_with_go/sessions"
 	"arpit006/web_app_with_go/templ"
-	"github.com/gorilla/sessions"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net/http"
 )
 
-// sessionStore using Cookie as our session store
-var sessionStore = sessions.NewCookieStore([]byte("t0p-s3cr3t"))
 
 func LoginGetHandler(w http.ResponseWriter, r *http.Request) {
 	templates := templ.GetTemplateFactory()
@@ -17,24 +18,31 @@ func LoginGetHandler(w http.ResponseWriter, r *http.Request) {
 func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	name := r.PostForm.Get("username")
-	session, _ := sessionStore.Get(r, "session")
-	session.Values["username"] = name
-	session.Save(r, w)
+	password := r.PostForm.Get("password")
+	// match with the encrypted password used during signup
+	hash, err := datastore.GetBytesFromRedis("user:" + name)
+	if err != nil {
+		log.Println("Could not retrieve Saved password!")
+		//http.Error(w, "Username and Password do not match. Unauthorized", 401)
+		http.Redirect(w, r, "/login", 401)
+		return
+	}
+	err = bcrypt.CompareHashAndPassword(hash, []byte(password))
+	if err != nil {
+		log.Printf("Wrong Password for username: %s", name)
+		http.Error(w, "Incorrect Password!", 401)
+	}
+	sessions2.SaveSession(w, r, name)
 	http.Redirect(w, r, "/", 301)
 }
 
 // LoginTestHandler only to test if the username is getting saved in the session
 func LoginTestHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := sessionStore.Get(r, "session")
-	untyped, ok := session.Values["username"]
-	if !ok {
-		http.Error(w, "Username not saved to session", 500)
-		return
-	}
-	username, ok := untyped.(string)
-	if !ok {
-		http.Error(w, "Username not parsed from session", 500)
-		return
+	sessions2.ValidateSession(w, r)
+	username, err := sessions2.GetUsernameFromSession(w, r)
+	if err != nil {
+		log.Println("Could not retrieve Username from Session. Error is ", err)
+		http.Redirect(w, r, "/login", 302)
 	}
 	w.Write([]byte("Username is ::" +  username))
 }

@@ -12,7 +12,15 @@ func StartWebApp() {
 	r := router.GetHttpRouterFactory()
 	// registering routers
 	registerHttpRouters(r)
+	// logging config override
+	SetLoggingConfig()
+
 	http.ListenAndServe(":8080", r)
+}
+
+func SetLoggingConfig() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 }
 
 func registerHttpRouters(r *mux.Router) {
@@ -25,4 +33,14 @@ func registerHttpRouters(r *mux.Router) {
 	log.Println("Registering Login Router......")
 	var loginRouter router.HttpRouter = &router.LoginRouter{}
 	loginRouter.RegisterRoute(r)
+
+	//registering signup Router
+	log.Println("Registering Signup Router......")
+	var registerRouter router.HttpRouter = &router.RegisterRouter{}
+	registerRouter.RegisterRoute(r)
+
+	// registering Logout Router
+	log.Println("Registering Logout Router......")
+	var logoutRouter router.HttpRouter = &router.LogoutRouter{}
+	logoutRouter.RegisterRoute(r)
 }
