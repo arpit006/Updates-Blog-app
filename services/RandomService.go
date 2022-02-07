@@ -2,13 +2,12 @@ package services
 
 import (
 	"arpit006/web_app_with_go/datastore"
-	sessions2 "arpit006/web_app_with_go/sessions"
 	"arpit006/web_app_with_go/templ"
 	"net/http"
 )
 
 func IndexGetHandler(w http.ResponseWriter, r *http.Request) {
-	sessions2.ValidateSession(w, r)
+	//sessions2.ValidateSession(w, r)
 	templates := templ.GetTemplateFactory()
 	comments, err := datastore.GetRangeFromRedis("comments", 0, 10)
 	if err != nil {

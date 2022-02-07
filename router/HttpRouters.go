@@ -1,6 +1,7 @@
 package router
 
 import (
+	"arpit006/web_app_with_go/handlers"
 	"arpit006/web_app_with_go/services"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -15,8 +16,8 @@ type RandomRouter struct {
 }
 
 func (rR RandomRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/", services.IndexGetHandler).Methods(http.MethodGet)
-	router.HandleFunc("/", services.IndexPostHandler).Methods(http.MethodPost)
+	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.IndexGetHandler))).Methods(http.MethodGet)
+	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.IndexPostHandler))).Methods(http.MethodPost)
 	fs := http.FileServer(http.Dir("./static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 }
@@ -26,9 +27,9 @@ type LoginRouter struct {
 }
 
 func (lR LoginRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/login", services.LoginGetHandler).Methods(http.MethodGet)
-	router.HandleFunc("/login", services.LoginPostHandler).Methods(http.MethodPost)
-	router.HandleFunc("/test", services.LoginTestHandler).Methods(http.MethodGet)
+	router.HandleFunc("/login", handlers.Logger(services.LoginGetHandler)).Methods(http.MethodGet)
+	router.HandleFunc("/login", handlers.Logger(services.LoginPostHandler)).Methods(http.MethodPost)
+	router.HandleFunc("/test", handlers.Logger(services.LoginTestHandler)).Methods(http.MethodGet)
 }
 
 // RegisterRouter registers in new user
@@ -36,8 +37,8 @@ type RegisterRouter struct {
 }
 
 func (rR RegisterRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/register", services.RegisterGetHandler).Methods(http.MethodGet)
-	router.HandleFunc("/register", services.RegisterPostHandler).Methods(http.MethodPost)
+	router.HandleFunc("/register", handlers.Logger(services.RegisterGetHandler)).Methods(http.MethodGet)
+	router.HandleFunc("/register", handlers.Logger(services.RegisterPostHandler)).Methods(http.MethodPost)
 }
 
 // LogoutRouter registers logout activity
@@ -45,13 +46,13 @@ type LogoutRouter struct {
 }
 
 func (lR LogoutRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/logout", services.Logout).Methods(http.MethodGet)
+	router.HandleFunc("/logout", handlers.Logger(services.Logout)).Methods(http.MethodGet)
 }
 
 type AuthErrorRouter struct {
 }
 
 func (eR AuthErrorRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/auth-error", services.AuthErrorHandler).Methods(http.MethodGet)
+	router.HandleFunc("/auth-error", handlers.Logger(services.AuthErrorHandler)).Methods(http.MethodGet)
 }
 
