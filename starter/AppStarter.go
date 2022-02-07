@@ -43,4 +43,9 @@ func registerHttpRouters(r *mux.Router) {
 	log.Println("Registering Logout Router......")
 	var logoutRouter router.HttpRouter = &router.LogoutRouter{}
 	logoutRouter.RegisterRoute(r)
+
+	// registering Auth Error Router
+	log.Println("Registering AuthError Router......")
+	var authErrorRouter router.HttpRouter = &router.AuthErrorRouter{}
+	authErrorRouter.RegisterRoute(r)
 }

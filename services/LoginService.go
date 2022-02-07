@@ -24,16 +24,18 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Could not retrieve Saved password!")
 		//http.Error(w, "Username and Password do not match. Unauthorized", 401)
-		http.Redirect(w, r, "/login", 401)
+		http.Redirect(w, r, "/auth-error", 302)
 		return
 	}
 	err = bcrypt.CompareHashAndPassword(hash, []byte(password))
 	if err != nil {
 		log.Printf("Wrong Password for username: %s", name)
-		http.Error(w, "Incorrect Password!", 401)
+		//http.Error(w, "Incorrect Password!", 401)
+		http.Redirect(w, r, "/auth-error", 302)
+		return
 	}
 	sessions2.SaveSession(w, r, name)
-	http.Redirect(w, r, "/", 301)
+	http.Redirect(w, r, "/", 302)
 }
 
 // LoginTestHandler only to test if the username is getting saved in the session

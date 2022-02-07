@@ -40,6 +40,7 @@ func (rR RegisterRouter) RegisterRoute(router *mux.Router) {
 	router.HandleFunc("/register", services.RegisterPostHandler).Methods(http.MethodPost)
 }
 
+// LogoutRouter registers logout activity
 type LogoutRouter struct {
 }
 
@@ -47,4 +48,10 @@ func (lR LogoutRouter) RegisterRoute(router *mux.Router) {
 	router.HandleFunc("/logout", services.Logout).Methods(http.MethodGet)
 }
 
+type AuthErrorRouter struct {
+}
+
+func (eR AuthErrorRouter) RegisterRoute(router *mux.Router) {
+	router.HandleFunc("/auth-error", services.AuthErrorHandler).Methods(http.MethodGet)
+}
 

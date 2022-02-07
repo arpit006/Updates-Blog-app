@@ -21,7 +21,8 @@ func RegisterPostHandler(w http.ResponseWriter, r *http.Request) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), cost)
 	if err != nil {
 		log.Println("Error in hashing the user password for username : ", name)
-		http.Error(w, "Could not hash the password. Please retry", 500)
+		//http.Error(w, "Could not hash the password. Please retry", 500)
+		http.Redirect(w, r, "/auth-error", 302)
 		return
 	}
 	datastore.SaveBytesToRedis("user:" + name, hash)
