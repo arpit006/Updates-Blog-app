@@ -1,11 +1,10 @@
 package datastore
 
 import (
-	"context"
 	"log"
 )
 
-var ctx = context.Background()
+var ctx = ContextFactory()
 
 func AddToRedis(key string, value string) {
 	client := GetRedisClientFactory()
@@ -63,4 +62,50 @@ func GetBytesFromRedis(key string) ([]byte, error) {
 		return nil, err
 	}
 	return bytes, nil
+}
+
+func Incr() (int64, error) {
+	client := GetRedisClientFactory()
+	return client.Incr(ctx, "user:next-id").Result()
+}
+
+
+func HSetStrStr(hash, key, value string) (int64, error){
+	client := GetRedisClientFactory()
+	id, err := client.HSet(ctx, hash, key, value).Result()
+	if err != nil {
+		log.Printf("Error in HSET Redis for hash: [%s] key: [%s] value: [%s]. Error is %s", hash, key, value, err)
+		return -1, err
+	}
+	return id, nil
+}
+
+func HGetStrStr(hash, key string) (string, error) {
+	client := GetRedisClientFactory()
+	res, err := client.HGet(ctx, hash, key).Result()
+	if err != nil {
+		log.Printf("HGET Redis Error for hash: [%s] key: [%s]. Error is %s", hash, key, err)
+		return "", err
+	}
+	return res, nil
+}
+
+func HGetStrBytesArr(hash, key string) ([]byte, error) {
+	client := GetRedisClientFactory()
+	res, err := client.HGet(ctx, hash, key).Bytes()
+	if err != nil {
+		log.Printf("HGET Redis Error for hash: [%s] key: [%s]. Error is %s", hash, key, err)
+		return nil, err
+	}
+	return res, nil
+}
+
+func HGetStrInt(hash, key string) (int64, error) {
+	client := GetRedisClientFactory()
+	res, err := client.HGet(ctx, hash, key).Int64()
+	if err != nil {
+		log.Printf("HGET Redis Error for hash: [%s] key: [%s]. Error is %s", hash, key, err)
+		return -1, err
+	}
+	return res, nil
 }

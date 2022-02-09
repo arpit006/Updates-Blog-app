@@ -4,7 +4,6 @@ import (
 	"arpit006/web_app_with_go/datastore"
 	sessions2 "arpit006/web_app_with_go/sessions"
 	"arpit006/web_app_with_go/templ"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
@@ -27,7 +26,7 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/auth-error", 302)
 		return
 	}
-	err = bcrypt.CompareHashAndPassword(hash, []byte(password))
+	err = ValidatePassword(hash, password)
 	if err != nil {
 		log.Printf("Wrong Password for username: %s", name)
 		//http.Error(w, "Incorrect Password!", 401)
