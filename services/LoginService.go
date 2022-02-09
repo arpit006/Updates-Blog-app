@@ -1,10 +1,9 @@
 package services
 
 import (
-	"arpit006/web_app_with_go/datastore"
+	"arpit006/web_app_with_go/handlers"
 	sessions2 "arpit006/web_app_with_go/sessions"
 	"arpit006/web_app_with_go/templ"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
@@ -19,19 +18,10 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	name := r.PostForm.Get("username")
 	password := r.PostForm.Get("password")
-	// match with the encrypted password used during signup
-	hash, err := datastore.GetBytesFromRedis("user:" + name)
+
+	err := AuthenticateUser(name, password)
 	if err != nil {
-		log.Println("Could not retrieve Saved password!")
-		//http.Error(w, "Username and Password do not match. Unauthorized", 401)
-		http.Redirect(w, r, "/auth-error", 302)
-		return
-	}
-	err = bcrypt.CompareHashAndPassword(hash, []byte(password))
-	if err != nil {
-		log.Printf("Wrong Password for username: %s", name)
-		//http.Error(w, "Incorrect Password!", 401)
-		http.Redirect(w, r, "/auth-error", 302)
+		handlers.HandleAuthError(w, r)
 		return
 	}
 	sessions2.SaveSession(w, r, name)
