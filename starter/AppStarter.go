@@ -26,7 +26,7 @@ func SetLoggingConfig() {
 func registerHttpRouters(r *mux.Router) {
 	// registering Random Router
 	log.Println("Registering Random Router......")
-	var randomRouter router.HttpRouter = &router.RandomRouter{}
+	var randomRouter router.HttpRouter = &router.UpdatesRouter{}
 	randomRouter.RegisterRoute(r)
 
 	//registering Login Router

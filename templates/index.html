@@ -1,5 +1,5 @@
 <head>
-    <title> Welcome to the Web app using Golang</title>
+    <title> Insta-Updates </title>
     <link rel="stylesheet" type="text/css" href="/static/index.css">
 </head>
 <body>
@@ -8,16 +8,20 @@
             <input type="submit" value="Logout" />
         </form>
 <!--    </div>-->
-    <h1>Comments</h1>
+    <h1>Insta-Updates</h1>
     <form method="POST">
         <label>
-            <textarea name="comment"></textarea>
+            <textarea name="updates"></textarea>
         </label>
         <div>
-            <button type="submit">POST Comment</button>
+            <button type="submit">POST Update</button>
         </div>
     </form>
     {{ range . }}
-    <div> {{ . }}</div>
+    <div>
+        <div> <strong> {{ .GetUsername }} tweets: </strong> </div>
+        <div> {{ .GetBody }}</div>
+        <div> <strong> {{ .GetCreatedAtTime }} </strong> </div>
+    </div>
     {{ end }}
 </body>

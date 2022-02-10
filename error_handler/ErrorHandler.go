@@ -1,4 +1,4 @@
-package handlers
+package error_handler
 
 import (
 	"fmt"

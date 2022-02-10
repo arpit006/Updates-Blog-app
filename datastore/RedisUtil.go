@@ -41,6 +41,10 @@ func (rp *RedisPipe) ExecInPipeStrBytesArr(hash, key string, value []byte) {
 	rp.Pipe.HSet(ctx, hash, key, value)
 }
 
+func (rp *RedisPipe) LPushInPipeStrInt(key string, value int64) {
+	rp.Pipe.LPush(ctx, key, value)
+}
+
 // ExecPipeline closes the pipeline. Performs bulk operations
 func (rp *RedisPipe) ExecPipeline() error {
 	_, err := rp.Pipe.Exec(ctx)

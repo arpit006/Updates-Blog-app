@@ -11,13 +11,13 @@ type HttpRouter interface {
 	RegisterRoute(router *mux.Router)
 }
 
-// RandomRouter a random Router
-type RandomRouter struct {
+// UpdatesRouter a random Router
+type UpdatesRouter struct {
 }
 
-func (rR RandomRouter) RegisterRoute(router *mux.Router) {
-	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.IndexGetHandler))).Methods(http.MethodGet)
-	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.IndexPostHandler))).Methods(http.MethodPost)
+func (rR UpdatesRouter) RegisterRoute(router *mux.Router) {
+	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.UpdatesGetHandler))).Methods(http.MethodGet)
+	router.HandleFunc("/", handlers.Logger(handlers.Authenticator(services.UpdatesPostHandler))).Methods(http.MethodPost)
 	fs := http.FileServer(http.Dir("./static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 }

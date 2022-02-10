@@ -1,16 +1,27 @@
 package constants
 
-// Constants for models
+// Constants for User model
 const (
 	USER_NEXT_ID string = "user:next-id"
 	USER_BY_ID string = "user:%d"
 	USER_BY_USERNAME string = "user:by-username"
 )
 
+// Constants for Updates model
+const (
+	UPDATES_NEXT_ID string = "updates:next-id"
+	UPDATE_BY_ID string = "update:%d"
+	BODY string = "body"
+	TIME string = "time"
+)
+
 const (
 	ID string = "id"
 	USERNAME string = "username"
 	PASSWORD_HASH string = "password-hash"
+	SESSION string = "session"
+	USER_ID string = "user-id"
+	UPDATES string = "updates"
 )
 
 // Error Constants

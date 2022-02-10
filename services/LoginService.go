@@ -1,7 +1,7 @@
 package services
 
 import (
-	"arpit006/web_app_with_go/handlers"
+	"arpit006/web_app_with_go/error_handler"
 	sessions2 "arpit006/web_app_with_go/sessions"
 	"arpit006/web_app_with_go/templ"
 	"log"
@@ -19,12 +19,12 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	name := r.PostForm.Get("username")
 	password := r.PostForm.Get("password")
 
-	err := AuthenticateUser(name, password)
+	user, err := AuthenticateUser(name, password)
 	if err != nil {
-		handlers.HandleAuthError(w, r)
+		error_handler.HandleAuthError(w, r)
 		return
 	}
-	sessions2.SaveSession(w, r, name)
+	sessions2.SaveSession(w, r, user)
 	http.Redirect(w, r, "/", 302)
 }
 
